@@ -1,4 +1,9 @@
-- name: restart bind
+- name: bind config changed
   service:
     name: bind9
     state: restarted
+
+- name: bind zone changed
+  service:
+    name: bind9
+    state: reloaded

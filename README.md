@@ -16,27 +16,61 @@ None
 
 ## How to use
 
+Inventory:
+
+```
+all:
+  children:
+    dns:
+      children:
+        dnsmaster:
+          hosts:
+            ns1.example.com:
+        dnsslave:
+          hosts:
+            ns2.example.com:
+```
+
+`group_vars/dnsmaster.yml`:
+
+```
+bind_role: master
+bind_slave_host_group: dnsslave
+bind_zones:
+  test.local:
+    ns_primary: ns1.test.local
+    mail: root@test.local
+    serial: 2017092202
+    dnssec: yes
+    entries:
+      - { name: '@', type: ns, value: localhost. }
+      - { name: hello, type: a, value: 1.2.3.4 }
+  hello.local:
+    ns_primary: ns1.hello.local
+    mail: root@hello.local
+    serial: 2017092201
+    dnssec: no
+    entries:
+      - { name: '@', type: ns, value: localhost. }
+      - { name: hello, type: a, value: 4.3.2.1 }
+```
+
+`group_vars/dnsslave.yml`:
+
+```
+bind_role: slave
+bind_slave_host_group: dnsmaster
+bind_zones:
+  test.local:
+    ns_primary: ns1.test.local
+  hello.local:
+    ns_primary: ns1.hello.local
+```
+
+Playbook:
+
 ```
 - hosts: dns-server
-  vars:
-    bind_role: master
-    bind_zones:
-      test.local:
-        ns_primary: ns1.test.local
-        mail: root@test.local
-        serial: 2017092202
-        dnssec: yes
-        entries:
-          - { name: '@', type: ns, value: localhost. }
-          - { name: hello, type: a, value: 1.2.3.4 }
-      hello.local:
-        ns_primary: ns1.hello.local
-        mail: root@hello.local
-        serial: 2017092201
-        dnssec: no
-        entries:
-          - { name: '@', type: ns, value: localhost. }
-          - { name: hello, type: a, value: 4.3.2.1 }
   roles:
     - bind 
 ```

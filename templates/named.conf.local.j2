@@ -2,12 +2,31 @@
 {% for zone, value in bind_zones.iteritems() %}
 
 zone "{{ zone }}" IN {
-	type master;
+	type {{ bind_role }};
+
 {% if 'dnssec' in value and value.dnssec %}
-	file "/etc/bind/zones/db.{{ zone }}.signed";
+	file "/etc/bind/zones/db.{{ zone }}.signed";
+{% elif bind_role == 'master' %}
+	file "/etc/bind/zones/db.{{ zone }}";
 {% else %}
-	file "/etc/bind/zones/db.{{ zone }}";
+	file "/etc/bind/zones/db.slave.{{ zone }}";
 {% endif %}
-	allow-transfer { 217.70.177.40; };
+
+{% if bind_role == 'master' %}
+	notify yes;
+	allow-transfer {
+{% for host in groups[bind_slave_host_group] %}
+		{{ hostvars[host]['ansible_default_ipv4']['address'] }};
+		{{ hostvars[host]['ansible_default_ipv6']['address'] }};
+{% endfor %}
+	};
+{% else %}
+	masters {
+{% for host in groups[bind_master_host_group] %}
+		{{ hostvars[host]['ansible_default_ipv4']['address'] }};
+		{{ hostvars[host]['ansible_default_ipv6']['address'] }};
+{% endfor %}
+	};
+{% endif %}
 };
 {% endfor %}

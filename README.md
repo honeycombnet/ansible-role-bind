@@ -1,9 +1,7 @@
 # Ansible role: Bind
-[![Version](https://img.shields.io/badge/latest_version-0.1.0-green.svg)](https://github.com/nishiki/ansible-role-bind/releases)
-[![Build Status](https://travis-ci.org/nishiki/ansible-role-bind.svg?branch=master)](https://travis-ci.org/nishiki/ansible-role-bind)
-[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/nishiki/ansible-role-bind/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/honeycombnet/ansible-role-bind.svg?branch=master)](https://travis-ci.org/honeycombnet/ansible-role-bind)
 
-Install and configure bind with dnssec
+BIND with DNSSEC signed zones.
 
 ## Requirements
 
@@ -11,8 +9,10 @@ None
 
 ## Role variables
 
- * `bind_role` - the role `master` or `slave`, don't generate dnssec key on `slave`
- * `bind_zones` - the dns zones
+* `bind_role` - the role `master` or `slave`, don't generate dnssec key on `slave`
+* `bind_slave_host_group` - name of the host group that make up the DNS slaves
+* `bind_master_host_group` - name of the host group that make up the DNS masters
+* `bind_zones` - the dns zones
 
 ## How to use
 

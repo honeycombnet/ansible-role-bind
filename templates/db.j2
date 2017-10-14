@@ -11,9 +11,9 @@ $TTL    {{ item.value.ttl|default(3600) }}
 
 {% for entry in item.value.entries %}
 {% if entry.type|upper == 'MX' %}
-{{ entry.name }}{% for i in range(0, 15 - entry.name|length) %} {% endfor %} IN MX {{ entry.priority }}     {{ entry.value }}
+{{ entry.name }}	IN	MX	{{ entry.priority }}	{{ entry.value }}
 {% else %}
-{{ entry.name }}{% for i in range(0, 15 - entry.name|length) %} {% endfor %} IN {{ entry.type|upper }}{% for i in range(0, 9 - entry.type|length) %} {% endfor %} {{ entry.value }}
+{{ entry.name }}	IN	{{ entry.type|upper }}	{{ entry.value }}
 {% endif %}
 {% endfor %}
 {% if 'dnssec' in item.value and item.value.dnssec %}

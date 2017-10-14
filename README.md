@@ -75,6 +75,15 @@ Playbook:
     - bind 
 ```
 
+### DS records
+
+When a new zone is created using this role, it will generate new private keys to sign the zone.
+
+You must then add the newly-generated DS records to the parent DNS zone.
+(Usually this means giving it to your domain registrar.)
+
+These DS records are located on the master server at `/etc/bind/keys/dsset-ZONE`
+
 ## Development
 ### Tests with docker
 

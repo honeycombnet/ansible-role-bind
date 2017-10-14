@@ -23,19 +23,19 @@ all:
   children:
     dns:
       children:
-        dnsmaster:
+        dns-master:
           hosts:
-            ns1.example.com:
-        dnsslave:
+            ns1.example.com
+        dns-slave:
           hosts:
-            ns2.example.com:
+            ns2.example.com
 ```
 
-`group_vars/dnsmaster.yml`:
+`group_vars/dns-master.yml`:
 
 ```
 bind_role: master
-bind_slave_host_group: dnsslave
+bind_slave_host_group: dns-slave
 bind_zones:
   test.local:
     ns_primary: ns1.test.local
@@ -55,11 +55,11 @@ bind_zones:
       - { name: hello, type: a, value: 4.3.2.1 }
 ```
 
-`group_vars/dnsslave.yml`:
+`group_vars/dns-slave.yml`:
 
 ```
 bind_role: slave
-bind_slave_host_group: dnsmaster
+bind_slave_host_group: dns-master
 bind_zones:
   test.local:
     ns_primary: ns1.test.local
@@ -70,7 +70,7 @@ bind_zones:
 Playbook:
 
 ```
-- hosts: dns-server
+- hosts: dns
   roles:
     - bind 
 ```

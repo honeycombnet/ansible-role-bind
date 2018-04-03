@@ -1,4 +1,10 @@
 ---
+- name: generate serial
+  become: false
+  shell: bash -c "TZ=UTC date +%s"
+  register: serial
+  check_mode: no
+
 - name: zone file
   template:
     src: db.j2
